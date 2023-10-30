@@ -323,6 +323,7 @@ public class Class01 {
                 }
             } else {
                 System.out.println("Somthing wrong when slove captcha");
+                driver.close();
             }
         }
 
