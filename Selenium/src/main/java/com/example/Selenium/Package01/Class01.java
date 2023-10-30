@@ -253,6 +253,7 @@ public class Class01 {
                         ImageIO.write(capture, "png", new File("F:\\CongViecHocTap\\Captcha\\Captcha.png"));
                     } catch (IOException e) {
                         e.printStackTrace();
+                        break;
                     }
 
                     ((JavascriptExecutor) driver).executeScript("window.open('https://capmonster.cloud/en/Demo/','_blank');");
@@ -321,7 +322,7 @@ public class Class01 {
                     driver.findElement(By.xpath("//*[@id=\"progessResults\"]/div[2]/div/a[1]/i")).click();
                 }
             } else {
-                System.out.println("Captcha image is not displayed");
+                System.out.println("Somthing wrong when slove captcha");
             }
         }
 
