@@ -84,7 +84,6 @@ public class Class01 {
         options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation")); // disable chrome running as automation
 
         WebDriver driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
 
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         driver.manage().window().maximize();
