@@ -58,7 +58,7 @@ public class Class01 {
 
     private static WebDriverWait wait;
   
-    @GetMapping("/ttsfree_captcha_noForLoop_thread")
+     @GetMapping("/ttsfree_captcha_noForLoop_thread")
     public ResponseEntity<?> ttsfree_captcha_noForLoop_Threads(@RequestParam Map<String, String> params) throws InterruptedException, IOException {
         WebDriverWait wait;
         List<WebElement> element_solve;
@@ -182,27 +182,13 @@ public class Class01 {
             driver.findElement(By.xpath("/html/body/span/span/span[1]/input")).sendKeys(Keys.ENTER);
         }
 
-        // new ad displays 1
-        element_solve = driver.findElements(By.xpath("//div[@aria-modal='true']"));
-        if (element_solve.size() > 0 && element_solve.get(0).isDisplayed()) {
-            System.out.println("new ad displays after choose sex");
-            driver.findElement(By.xpath("//button[@aria-label='Close this dialog']")).click();
+        if (voice.equals("Male")) {
+            WebDriverWait wait_maleVoice = new WebDriverWait(driver, Duration.ofSeconds(1));
+            wait_maleVoice.until(ExpectedConditions.elementToBeClickable(By.xpath(male_voice))).click();
+        }else{
+            WebDriverWait wait_femaleVoice = new WebDriverWait(driver, Duration.ofSeconds(1));
+            wait_femaleVoice.until(ExpectedConditions.elementToBeClickable(By.xpath(female_voice))).click();
         }
-
-        Thread thread_maleVoice = new Thread(() -> {
-            if (voice.equals("Male")) {
-                WebDriverWait wait_maleVoice = new WebDriverWait(driver, Duration.ofSeconds(10));
-                wait_maleVoice.until(ExpectedConditions.elementToBeClickable(By.xpath(male_voice))).click();
-            }
-        });
-        Thread thread_femaleVoice = new Thread(() -> {
-            if (voice.equals("Female")) {
-                WebDriverWait wait_femaleVoice = new WebDriverWait(driver, Duration.ofSeconds(10));
-                wait_femaleVoice.until(ExpectedConditions.elementToBeClickable(By.xpath(female_voice))).click();
-            }
-        });
-        thread_maleVoice.start();
-        thread_femaleVoice.start();
 
         driver.findElement(By.xpath("//*[@id=\"frm_tts\"]/div[2]/div[2]/div[1]/a")).click();
 
@@ -233,96 +219,96 @@ public class Class01 {
 
             wait = new WebDriverWait(driver, Duration.ofSeconds(5));
             try {
-                wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("captcha_image")));
+                wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("captcha_image"))); //load đủ 5 giây mà ko hiện thì xuống catch
                 element_solve = driver.findElements(By.id("captcha_image"));
-            } catch (Exception exception1) {
-                System.out.println("exception captcha is not displays");
-                System.out.println(exception1);
-            }
-            if (element_solve.size() > 0 && element_solve.get(0).isDisplayed()) {
-                while (true) {
-                    System.out.println("Captcha displayed");
+                if (element_solve.size() > 0 && element_solve.get(0).isDisplayed()) {
+                    while (true) {
+                        System.out.println("Captcha displayed");
 
-                    js.executeScript("arguments[0].scrollIntoView();", Element_inputText);
+                        js.executeScript("arguments[0].scrollIntoView();", Element_inputText);
 
-                    File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-                    try {
-                        BufferedImage fullScreen = ImageIO.read(screenshot);
-                        BufferedImage capture = fullScreen.getSubimage(892, 615, 190, 55);
-                        ImageIO.write(capture, "png", new File("F:\\CongViecHocTap\\Captcha\\Captcha.png"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        break;
-                    }
-
-                    ((JavascriptExecutor) driver).executeScript("window.open('https://capmonster.cloud/en/Demo/','_blank');");
-                    windowHandle = driver.getWindowHandles().toArray()[1].toString();
-                    driver.switchTo().window(windowHandle);
-                    driver.findElement(By.xpath("//*[@id=\"uploadImageInput\"]")).sendKeys("F:\\CongViecHocTap\\Captcha\\Captcha.png"); //copy input tag
-
-                    wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-                    try {
-                        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("resultImage")));
-                        WebElement image = driver.findElement(By.id("resultImage"));
-                        if (element_solve.size() > 0 && element_solve.get(0).isDisplayed()) {
-                            driver.findElement(By.xpath("/html/body/div[1]/div[1]/small")).click();
-                            String imageUrl = image.getAttribute("src");
-                            String base64Image = imageUrl.split(",")[1];
-                            byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
-                            FileOutputStream fos = new FileOutputStream(new File("F:\\CongViecHocTap\\CaptchaMonster\\CaptchaMonster.jpg"));
-                            fos.write(decodedBytes);
-                            fos.close();
+                        File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+                        try {
+                            BufferedImage fullScreen = ImageIO.read(screenshot);
+                            BufferedImage capture = fullScreen.getSubimage(892, 615, 190, 55);
+                            ImageIO.write(capture, "png", new File("F:\\CongViecHocTap\\Captcha\\Captcha.png"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            break;
                         }
-                    } catch (Exception exception2) {
-                        System.out.println("resultImage error : " + exception);
-                        break;
-                    }
 
-                    ((JavascriptExecutor) driver).executeScript("window.open('https://www.imagetotext.info/','_blank');");
-                    windowHandle = driver.getWindowHandles().toArray()[2].toString();
-                    driver.switchTo().window(windowHandle);
+                        ((JavascriptExecutor) driver).executeScript("window.open('https://capmonster.cloud/en/Demo/','_blank');");
+                        windowHandle = driver.getWindowHandles().toArray()[1].toString();
+                        driver.switchTo().window(windowHandle);
+                        driver.findElement(By.xpath("//*[@id=\"uploadImageInput\"]")).sendKeys("F:\\CongViecHocTap\\Captcha\\Captcha.png"); //copy input tag
 
-                    js.executeScript("arguments[0].scrollIntoView();", Element_inputText);
+                        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+                        try {
+                            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("resultImage")));
+                            WebElement image = driver.findElement(By.id("resultImage"));
+                            if (element_solve.size() > 0 && element_solve.get(0).isDisplayed()) {
+                                driver.findElement(By.xpath("/html/body/div[1]/div[1]/small")).click();
+                                String imageUrl = image.getAttribute("src");
+                                String base64Image = imageUrl.split(",")[1];
+                                byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
+                                FileOutputStream fos = new FileOutputStream(new File("F:\\CongViecHocTap\\CaptchaMonster\\CaptchaMonster.jpg"));
+                                fos.write(decodedBytes);
+                                fos.close();
+                            }
+                        } catch (Exception exception2) {
+                            System.out.println("resultImage error : " + exception);
+                            break;
+                        }
 
-                    driver.findElement(By.xpath("//*[@id=\"file\"]")).sendKeys("F:\\CongViecHocTap\\CaptchaMonster\\CaptchaMonster.jpg");
-                    driver.findElement(By.id("jsShadowRoot")).click();
+                        ((JavascriptExecutor) driver).executeScript("window.open('https://www.imagetotext.info/','_blank');");
+                        windowHandle = driver.getWindowHandles().toArray()[2].toString();
+                        driver.switchTo().window(windowHandle);
 
-                    wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-                    try {
-                        WebElement element = driver.findElement(By.id("imagetotext_result0"));
-                        wait.until(ExpectedConditions.attributeToBeNotEmpty(element, "value"));
-                        string = String.valueOf(element.getAttribute("value"));
-                        string = string.replaceAll("\\s+", "");
-                        string = string.replaceAll("[^a-zA-Z0-9]", "");
-                        System.out.println(string);
-                        int count = string.length();
-                        System.out.println("Số kí tự trong chuỗi là: " + count);
+                        js.executeScript("arguments[0].scrollIntoView();", Element_inputText);
+
+                        driver.findElement(By.xpath("//*[@id=\"file\"]")).sendKeys("F:\\CongViecHocTap\\CaptchaMonster\\CaptchaMonster.jpg");
+                        driver.findElement(By.id("jsShadowRoot")).click();
+
+                        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+                        try {
+                            WebElement element = driver.findElement(By.id("imagetotext_result0"));
+                            wait.until(ExpectedConditions.attributeToBeNotEmpty(element, "value"));
+                            string = String.valueOf(element.getAttribute("value"));
+                            string = string.replaceAll("\\s+", "");
+                            string = string.replaceAll("[^a-zA-Z0-9]", "");
+                            System.out.println(string);
+                            int count = string.length();
+                            System.out.println("Số kí tự trong chuỗi là: " + count);
+                            driver.close();
+                        } catch (Exception exception3) {
+                            System.out.println("Value in input text is not displays");
+                            break;
+                        }
+
+                        windowHandle = driver.getWindowHandles().toArray()[1].toString();
+                        driver.switchTo().window(windowHandle);
                         driver.close();
-                    } catch (Exception exception3) {
-                        System.out.println("Value in input text is not displays");
-                        break;
-                    }
 
-                    windowHandle = driver.getWindowHandles().toArray()[1].toString();
-                    driver.switchTo().window(windowHandle);
+                        windowHandle = driver.getWindowHandles().toArray()[0].toString();
+                        driver.switchTo().window(windowHandle);
+                        driver.findElement(By.xpath("//*[@id=\"captcha_input\"]")).clear();
+                        driver.findElement(By.xpath("//*[@id=\"captcha_input\"]")).sendKeys(string);
+                        driver.findElement(By.xpath("//*[@id=\"progessResults\"]/div[2]/div/a[2]")).click();
+
+                        if (driver.findElement(By.xpath("//*[@id=\"progessResults\"]/div[2]/center[1]/div/a")).isDisplayed()) {
+                            // nếu nút download hiển thị thì break khỏi vòng lặp while
+                            break;
+                        }
+                        // nếu nút download không hiển thị thì tiếp tục công việc với captcha đến khi được thì thôi
+                        driver.findElement(By.xpath("//*[@id=\"progessResults\"]/div[2]/div/a[1]/i")).click();
+                    }
+                } else {
+                    System.out.println("Somthing wrong when slove captcha");
                     driver.close();
-
-                    windowHandle = driver.getWindowHandles().toArray()[0].toString();
-                    driver.switchTo().window(windowHandle);
-                    driver.findElement(By.xpath("//*[@id=\"captcha_input\"]")).clear();
-                    driver.findElement(By.xpath("//*[@id=\"captcha_input\"]")).sendKeys(string);
-                    driver.findElement(By.xpath("//*[@id=\"progessResults\"]/div[2]/div/a[2]")).click();
-
-                    if (driver.findElement(By.xpath("//*[@id=\"progessResults\"]/div[2]/center[1]/div/a")).isDisplayed()) {
-                        // nếu nút download hiển thị thì break khỏi vòng lặp while
-                        break;
-                    }
-                    // nếu nút download không hiển thị thì tiếp tục công việc với captcha đến khi được thì thôi
-                    driver.findElement(By.xpath("//*[@id=\"progessResults\"]/div[2]/div/a[1]/i")).click();
                 }
-            } else {
-                System.out.println("Somthing wrong when slove captcha");
-                driver.close();
+            } catch (Exception exception1) {
+                System.out.println("download button displays again"); //đôi khi code chạy quá nhanh nên dòng catch này để bắt nút download lần 2 , để ko bị hiểu làm là xuất hiện captcha
+                driver.findElement(By.xpath("//*[@id=\"progessResults\"]/div[2]/center[1]/div/a")).click();
             }
         }
 
