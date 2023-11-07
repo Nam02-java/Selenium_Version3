@@ -52,7 +52,7 @@ public class Class01 {
     private static List<WebElement> element_solve;
 
     protected static String user_name = "nam02test";
-    protected static String user_password = "IUtrangmaimai02";
+    protected static String user_password = "Password123";
 
     private static String string;
 
@@ -64,7 +64,7 @@ public class Class01 {
         List<WebElement> element_solve;
         String URL_WEBSITE = "https://ttsfree.com/vn";
         String user_name = "nam02test";
-        String user_password = "IUtrangmaimai02";
+        String user_password = "Password123";
         String male_voice = "//*[@id=\"voice_name_bin\"]/div[2]/label";
         String female_voice = "//*[@id=\"voice_name_bin\"]/div[1]/label";
         String fileName;
